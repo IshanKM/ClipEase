@@ -12,7 +12,7 @@ public class ClipboardController {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 
-    public void testbutton() {
+    public void testbutton()    {
         System.out.println("test");
     }
 }
