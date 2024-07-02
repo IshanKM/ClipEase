@@ -2,14 +2,11 @@ package com.example.clipease;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class ClipboardViewController {
@@ -18,10 +15,15 @@ public class ClipboardViewController {
     private ListView<String> clipboardListView;
 
     private ObservableList<String> clipboardHistory;
+    private ClipboardDB clipboardDB;
 
     @FXML
     public void initialize() {
+        clipboardDB = new ClipboardDB();
         clipboardHistory = FXCollections.observableArrayList();
+
+        // Load existing clipboard history from the database
+        clipboardHistory.addAll(clipboardDB.getClipboardHistory());
         clipboardListView.setItems(clipboardHistory);
 
         // Start clipboard monitoring using Timeline
@@ -29,8 +31,10 @@ public class ClipboardViewController {
             String currentContent = getClipboardContent();
             if (!clipboardHistory.isEmpty() && !currentContent.equals(clipboardHistory.get(0)) && !currentContent.isEmpty()) {
                 clipboardHistory.add(0, currentContent); // Add to the top of the list
+                clipboardDB.saveClipboardContent(currentContent); // Save to the database
             } else if (clipboardHistory.isEmpty() && !currentContent.isEmpty()) {
                 clipboardHistory.add(0, currentContent); // Add first item
+                clipboardDB.saveClipboardContent(currentContent); // Save to the database
             }
         }));
         clipboardTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -44,10 +48,4 @@ public class ClipboardViewController {
         }
         return "";
     }
-
-    /*@FXML
-    public void handleClose() {
-        Stage stage = (Stage) closeIcon.getScene().getWindow();
-        stage.close();
-    } */
 }
