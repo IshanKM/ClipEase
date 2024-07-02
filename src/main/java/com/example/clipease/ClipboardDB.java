@@ -41,7 +41,7 @@ public class ClipboardDB {
 
     public List<String> getClipboardHistory() {
         List<String> history = new ArrayList<>();
-        String sql = "SELECT content FROM clipboard_history ORDER BY timestamp DESC";
+        String sql = "SELECT content FROM clipboard_history ORDER BY timestamp DESC LIMIT 10";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
