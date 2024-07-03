@@ -1,0 +1,25 @@
+/* styles.css */
+
+/* Remove focus border from the ListView itself */
+.list-view:focused {
+    -fx-background-color: -fx-control-inner-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* Customize the delete button to be transparent and show only an 'X' icon */
+.button {
+    -fx-background-color: transparent; /* Transparent background */
+    -fx-padding: 10px; /* Padding */
+    -fx-border: none; /* No border */
+}
+
+/* Adding an image as the button content */
+.button {
+    -fx-graphic: url("/com/example/clipease/resources/close.png"); /* Path to the delete icon image */
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}

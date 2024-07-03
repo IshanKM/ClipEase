@@ -20,37 +20,46 @@ public class ClipboardViewController {
 
     @FXML
     public void initialize() {
-        clipboardDB = new ClipboardDB();
-        List<String> history = clipboardDB.getClipboardHistory();
+        clipboardDB = new ClipboardDB(); //initialize db
+        List<String> history = clipboardDB.getClipboardHistory(); //get all previous history from db (previous clipboard contents)
 
-        clipboardListView.getItems().addAll(history);
+        clipboardListView.getItems().addAll(history); //add previous history to list
+        clipboardListView.setCellFactory(listView -> new ClipboardCell(this::deleteItem)); // Set custom cell factory
 
-        // Start clipboard monitoring using Timeline
+        // Add custom css file
+        clipboardListView.getStylesheets().add(getClass().getResource("/com/example/clipease/styles.css").toExternalForm());
+        // Start clipboard monitoring using TimdeleteClipboardContenteline
         Timeline clipboardTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             String currentContent = getClipboardContent();
-            if (!clipboardListView.getItems().isEmpty() && !currentContent.equals(clipboardListView.getItems().get(0)) && !currentContent.isEmpty()) {
+            if (!clipboardListView.getItems().isEmpty() && !currentContent.equals(clipboardListView.getItems().get(0)) && !currentContent.isEmpty()) { // If list is not empty and new content is different
                 clipboardDB.saveClipboardContent(currentContent);
                 clipboardListView.getItems().add(0, currentContent); // Add to the top of the list
                 if (clipboardListView.getItems().size() > 10) {
                     clipboardListView.getItems().remove(10); // Limit to top 10 items
                 }
-            } else if (clipboardListView.getItems().isEmpty() && !currentContent.isEmpty()) {
+            } else if (clipboardListView.getItems().isEmpty() && !currentContent.isEmpty()) { // If list is empty
                 clipboardDB.saveClipboardContent(currentContent);
                 clipboardListView.getItems().add(0, currentContent); // Add first item
             }
         }));
-        clipboardTimeline.setCycleCount(Timeline.INDEFINITE);
-        clipboardTimeline.play();
+        clipboardTimeline.setCycleCount(Timeline.INDEFINITE); // run again and again
+        clipboardTimeline.play(); // start
 
-        clipboardListView.setOnMouseClicked(event -> {
+        clipboardListView.setOnMouseClicked(event -> { // When list item is clicked
             String selectedItem = clipboardListView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 pasteClipboardContent(selectedItem);
+                deleteItem(selectedItem);
             }
         });
     }
 
-    private String getClipboardContent() {
+    public void deleteItem(String item) { // Delete clipboard content
+        clipboardDB.deleteClipboardContent(item);
+        clipboardListView.getItems().remove(item);
+    }
+
+    private String getClipboardContent() {  // Get clipboard content
         Clipboard clipboard = Clipboard.getSystemClipboard();
         if (clipboard.hasString()) {
             return clipboard.getString();
@@ -58,13 +67,13 @@ public class ClipboardViewController {
         return "";
     }
 
-    private void pasteClipboardContent(String content) {
+    private void pasteClipboardContent(String content) { // Paste clipboard content
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.putString(content);
         clipboard.setContent(clipboardContent);
 
-        // Extract the script from resources
+        // Run the paste.sh script
         try (InputStream is = getClass().getResourceAsStream("/com/example/clipease/paste.sh");
              BufferedReader reader = new BufferedReader(new InputStreamReader(is));
              BufferedWriter writer = new BufferedWriter(new FileWriter("paste.sh"))) {

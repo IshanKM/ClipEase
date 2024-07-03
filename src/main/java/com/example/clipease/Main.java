@@ -3,8 +3,10 @@ package com.example.clipease;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.geometry.Rectangle2D;
 
 import java.io.IOException;
 
@@ -13,14 +15,22 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("clipboard-view.fxml"));
-
-        //this will hide tittle bar
-        //stage.initStyle(StageStyle.UNDECORATED);
-        stage.initStyle(StageStyle.UTILITY);
-        Scene scene = new Scene(fxmlLoader.load(), 300, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 310, 400); // Set your desired width and height
         stage.setTitle("ClipEase");
         stage.setScene(scene);
+        stage.initStyle(StageStyle.UTILITY); //this will hide tittle bar
         stage.setAlwaysOnTop(true);
+
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds(); // Get the screen bounds
+
+        // Set the position of the stage to the bottom right corner
+        //double margin = 20.0;
+        stage.setX(screenBounds.getMaxX() - scene.getWidth());
+        stage.setY(screenBounds.getMaxY() - scene.getHeight()) ;
+
+
+        //stage.initStyle(StageStyle.UNDECORATED);
+
         stage.show();
 
     }

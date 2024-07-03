@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.clipease.ClipboardViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="310.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.clipease.ClipboardViewController">
    <children>
       <ListView fx:id="clipboardListView" layoutX="15.0" layoutY="41.0" prefHeight="319.0" prefWidth="270.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-      <Label layoutX="15.0" layoutY="361.0" prefHeight="36.0" prefWidth="270.0" text="   Select an item in your clipboard history to paste it">
+      <Label layoutX="15.0" layoutY="361.0" prefHeight="36.0" prefWidth="280.0" text="      Select an item in your clipboard history to paste it">
          <font>
             <Font size="11.0" />
          </font>
