@@ -18,10 +18,10 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 310, 400); // Set your desired width and height
         stage.setTitle("ClipEase");
         stage.setScene(scene);
-        stage.initStyle(StageStyle.UTILITY); //this will hide tittle bar
+        stage.initStyle(StageStyle.UNDECORATED); //this will hide tittle bar
         stage.setAlwaysOnTop(true);
 
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds(); // Get the screen bounds
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds(); // Get the screen boundsUNDECORATED
 
         // Set the position of the stage to the bottom right corner
         //double margin = 20.0;
@@ -31,7 +31,15 @@ public class Main extends Application {
 
         //stage.initStyle(StageStyle.UNDECORATED);
 
+        // Add a focus listener to close the app when it loses focus
+        stage.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) { // If the window loses focus
+                stage.close();
+            }
+        });
+
         stage.show();
+
 
     }
 

@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 
 public class ClipboardCell extends ListCell<String> {
@@ -14,11 +15,12 @@ public class ClipboardCell extends ListCell<String> {
 
     public ClipboardCell(ClipboardItemDeleteHandler deleteHandler) {
         super();
-        hbox.setSpacing(20);
+        hbox.setSpacing(38);
         hbox.setPadding(new Insets(5, 10, 5, 10));
+        VBox.setMargin(hbox, new Insets(50)); // Set margin around the HBox
 
         contentLabel.setPrefHeight(50); // Set fixed height
-        contentLabel.setPrefWidth(170); // Set fixed width
+        contentLabel.setPrefWidth(160); // Set fixed width
         contentLabel.setWrapText(true); // Allow text to wrap within the label
 
         HBox.setHgrow(contentLabel, Priority.ALWAYS);
