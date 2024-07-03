@@ -41,7 +41,7 @@ public class ClipboardDB {
 
     public List<String> getClipboardHistory() {
         List<String> history = new ArrayList<>();
-        String sql = "SELECT content FROM clipboard_history ORDER BY timestamp DESC LIMIT 10";
+        String sql = "SELECT content FROM clipboard_history ORDER BY timestamp DESC";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
@@ -53,5 +53,17 @@ public class ClipboardDB {
             e.printStackTrace();
         }
         return history;
+    }
+
+    public void deleteClipboardContent(String content) {
+        String sql = "DELETE FROM clipboard_history WHERE content = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, content);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
