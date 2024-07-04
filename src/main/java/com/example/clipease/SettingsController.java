@@ -1,9 +1,11 @@
 package com.example.clipease;
 
+import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -12,20 +14,35 @@ import java.io.IOException;
 
 public class SettingsController {
 
+
+    //private Button backButton;
     @FXML
-    private Button backButton;
+    private ImageView backButton;
 
     @FXML
     private AnchorPane rootPane;
 
     @FXML
     public void initialize() {
-        backButton.setOnAction(event -> {
+        backButton.setOnMouseClicked(event -> {
             try {
                 showClipboardView();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        });
+
+        // Add rotate effect handlers
+        backButton.setOnMouseEntered(event -> {
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.2), backButton);
+            rotateTransition.setToAngle(360); // Rotate 90 degrees
+            rotateTransition.play();
+        });
+
+        backButton.setOnMouseExited(event -> {
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.2), backButton);
+            rotateTransition.setToAngle(0); // Rotate back to 0 degrees
+            rotateTransition.play();
         });
     }
 

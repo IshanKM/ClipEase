@@ -15,11 +15,10 @@
             <Font size="11.0" />
          </font>
       </Label>
-      <ImageView fx:id="settingsIcon" fitHeight="21.0" fitWidth="35.0" layoutX="265.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="settings-icon" style="-fx-cursor: hand; -fx-scale-x: 1.0; -fx-scale-y: 1.0;">
+      <ImageView fx:id="settingsIcon" fitHeight="21.0" fitWidth="35.0" layoutX="265.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand; -fx-scale-x: 1.0; -fx-scale-y: 1.0;" styleClass="settings-icon">
          <image>
             <Image url="@resources/setting.png" />
          </image>
-
       </ImageView>
    </children>
 </AnchorPane>
