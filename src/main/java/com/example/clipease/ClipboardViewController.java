@@ -1,5 +1,6 @@
 package com.example.clipease;
 
+import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,6 +70,19 @@ public class ClipboardViewController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        });
+
+        // Add rotate effect handlers
+        settingsIcon.setOnMouseEntered(event -> {
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), settingsIcon);
+            rotateTransition.setToAngle(180); // Rotate 90 degrees
+            rotateTransition.play();
+        });
+
+        settingsIcon.setOnMouseExited(event -> {
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), settingsIcon);
+            rotateTransition.setToAngle(0); // Rotate back to 0 degrees
+            rotateTransition.play();
         });
     }
 

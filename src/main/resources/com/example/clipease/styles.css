@@ -23,3 +23,11 @@
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
+
+.settings-icon {
+    -fx-transition: transform 0.5s;
+}
+
+.settings-icon:hover {
+    -fx-rotate: 90deg;
+}
