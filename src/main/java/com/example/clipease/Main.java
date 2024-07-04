@@ -2,11 +2,11 @@ package com.example.clipease;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.geometry.Rectangle2D;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public class Main extends Application {
         // Set the position of the stage to the bottom right corner
         //double margin = 20.0;
         stage.setX(screenBounds.getMaxX() - scene.getWidth());
-        stage.setY(screenBounds.getMaxY() - scene.getHeight()) ;
+        stage.setY(screenBounds.getMaxY() - scene.getHeight());
 
 
         //stage.initStyle(StageStyle.UNDECORATED);

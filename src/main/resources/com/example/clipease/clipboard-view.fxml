@@ -9,13 +9,13 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="310.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.clipease.ClipboardViewController">
    <children>
-      <ListView fx:id="clipboardListView" layoutX="15.0" layoutY="41.0" prefHeight="319.0" prefWidth="270.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <ListView fx:id="clipboardListView" layoutX="15.0" layoutY="57.0" prefHeight="303.0" prefWidth="280.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
       <Label layoutX="15.0" layoutY="361.0" prefHeight="36.0" prefWidth="280.0" text="      Select an item in your clipboard history to paste it">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <ImageView fitHeight="21.0" fitWidth="35.0" layoutX="265.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="settingsIcon" fitHeight="21.0" fitWidth="35.0" layoutX="265.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="rotate-on-hover">
          <image>
             <Image url="@resources/setting.png" />
          </image>

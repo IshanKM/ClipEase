@@ -1,9 +1,13 @@
 package com.example.clipease;
 
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -17,6 +21,12 @@ public class ClipboardViewController {
     private ListView<String> clipboardListView;
 
     private ClipboardDB clipboardDB;
+
+    @FXML
+    private ImageView settingsIcon;
+
+    @FXML
+    private AnchorPane rootPane; // Add this to your FXML file's root AnchorPane
 
     @FXML
     public void initialize() {
@@ -52,6 +62,34 @@ public class ClipboardViewController {
                 deleteItem(selectedItem);
             }
         });
+
+        settingsIcon.setOnMouseClicked(event -> {
+            try {
+                showSettingsView();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
+    // Show settings view
+    private void showSettingsView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("settings-view.fxml"));
+        AnchorPane settingsPane = loader.load();
+
+        // Pass the root pane to the settings controller
+        SettingsController settingsController = loader.getController();
+        settingsController.setRootPane(rootPane);
+
+        // Animate the transition
+        settingsPane.setTranslateX(rootPane.getWidth());
+        rootPane.getChildren().add(settingsPane);
+
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.2), settingsPane);
+        transition.setToX(0);
+        transition.setOnFinished(evt -> rootPane.getChildren().remove(clipboardListView));
+        transition.play();
     }
 
     public void deleteItem(String item) { // Delete clipboard content
