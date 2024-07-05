@@ -1,6 +1,8 @@
 package com.example.clipease;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +66,22 @@ public class ClipboardDB {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void deleteOldClipboardItems(long days) {
+        String sql = "DELETE FROM clipboard WHERE timestamp < ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            LocalDateTime cutoffDate = LocalDateTime.now().minus(days, ChronoUnit.DAYS);
+            pstmt.setString(1, cutoffDate.toString());
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

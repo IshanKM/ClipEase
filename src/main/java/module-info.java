@@ -2,6 +2,7 @@ module com.example.clipease {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires java.prefs;
 
 
     opens com.example.clipease to javafx.fxml;

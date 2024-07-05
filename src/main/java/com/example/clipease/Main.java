@@ -24,9 +24,9 @@ public class Main extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds(); // Get the screen boundsUNDECORATED
 
         // Set the position of the stage to the bottom right corner
-        //double margin = 20.0;
-        stage.setX(screenBounds.getMaxX() - scene.getWidth());
-        stage.setY(screenBounds.getMaxY() - scene.getHeight());
+        double margin = 20.0;
+        stage.setX(screenBounds.getMaxX() - scene.getWidth() - margin);
+        stage.setY(screenBounds.getMaxY() - scene.getHeight() - margin);
 
 
         //stage.initStyle(StageStyle.UNDECORATED);
@@ -37,6 +37,9 @@ public class Main extends Application {
                 stage.close();
             }
         });
+
+        SettingsController settingsController = new SettingsController();
+        settingsController.startCleanupTask();
 
         stage.show();
 

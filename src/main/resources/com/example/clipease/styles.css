@@ -24,3 +24,12 @@
     -fx-background-repeat: no-repeat;
 }
 
+.button:focused{
+    -fx-border-color: red;
+}
+
+.curved-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 10px 10px 0 0; /* Curving only the top left and top right corners */
+    -fx-border-radius: 10px 10px 0 0;
+}
