@@ -4,19 +4,27 @@ import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.prefs.Preferences;
-
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.prefs.Preferences;
+import java.nio.file.Paths;
+
 
 public class SettingsController {
 
@@ -24,10 +32,11 @@ public class SettingsController {
     private static final String DURATION_PREF_KEY = "clipboard_duration";
     private static final String DEFAULT_DURATION = "15d";
 
-
-    //private Button backButton;
     @FXML
     private ImageView backButton;
+
+    @FXML
+    private Button exportButton;
 
     @FXML
     private AnchorPane rootPane;
@@ -36,8 +45,12 @@ public class SettingsController {
     private ChoiceBox<String> durationChoiceBox;
 
     @FXML
-    public void initialize() {
+    private ChoiceBox<String> pasteDurationChoiceBox;
 
+    private static boolean exporting = false;
+
+    @FXML
+    public void initialize() {
         // Load saved preference
         String savedDuration = preferences.get(DURATION_PREF_KEY, DEFAULT_DURATION);
         durationChoiceBox.setValue(savedDuration);
@@ -47,6 +60,22 @@ public class SettingsController {
             preferences.put(DURATION_PREF_KEY, newValue);
         });
 
+        // Add click handler to export button
+        exportButton.setOnAction(event -> exportToTextFile());
+
+
+        // Populate choice box with options
+        pasteDurationChoiceBox.getItems().addAll("1.5s", "2s", "2.5s", "10s");
+
+        // Load saved preference or set default
+        String savedPasteDuration = loadPasteDurationPreference();
+        pasteDurationChoiceBox.setValue(savedPasteDuration);
+
+        // Save preference on change
+        pasteDurationChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            savePasteDurationPreference(newValue);
+            updatePasteScript(newValue);
+        });
 
         // Add click handlers to back button
         backButton.setOnMouseClicked(event -> {
@@ -60,7 +89,7 @@ public class SettingsController {
         // Add rotate effect handlers
         backButton.setOnMouseEntered(event -> {
             RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.2), backButton);
-            rotateTransition.setToAngle(360); // Rotate 90 degrees
+            rotateTransition.setToAngle(360); // Rotate 360 degrees
             rotateTransition.play();
         });
 
@@ -75,26 +104,40 @@ public class SettingsController {
         this.rootPane = rootPane;
     }
 
-    // Public method to trigger the cleanup task
-    public void startCleanupTask() {
-        scheduleCleanupTask();
+    private String loadPasteDurationPreference() {
+        // Load from preferences or use a default value
+        return "2s";  // Example default
     }
 
-    private void scheduleCleanupTask() {
+    private void savePasteDurationPreference(String duration) {
+        // Save to preferences
+        // Example using Files.write for simplicity (adjust as per your preferences implementation)
+        Path prefFile = Paths.get("paste_duration.txt");
+        try {
+            Files.write(prefFile, duration.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void updatePasteScript(String duration) {
+        // Update paste.sh file with the selected duration
+        String scriptContent = "#!/bin/bash\n" +
+                "sleep " + duration + "\n" +
+                "xdotool key ctrl+v\n";
+
+        Path scriptFile = Paths.get("paste.sh");
+        try (FileWriter writer = new FileWriter(scriptFile.toFile())) {
+            writer.write(scriptContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteOldClipboardItems() {
         String duration = preferences.get(DURATION_PREF_KEY, DEFAULT_DURATION);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-        // Convert duration to days
         long days = convertDurationToDays(duration);
-
-        Runnable cleanupTask = () -> {
-            // Implement the logic to delete clipboard items older than the specified duration
-            deleteOldClipboardItems(days);
-        };
-
-        // Schedule the cleanup task to run daily
-        scheduler.scheduleAtFixedRate(cleanupTask, 0, 1, TimeUnit.DAYS);
+        ClipboardDB.deleteOldClipboardItems(days);
     }
 
     private long convertDurationToDays(String duration) {
@@ -106,18 +149,12 @@ public class SettingsController {
             case "1y":
                 return 365;
             case "lifetime":
-                return Long.MAX_VALUE; // Or a very large value representing "lifetime"
+                return Long.MAX_VALUE;
             default:
-                return 15; // Default duration
+                return 15;
         }
     }
-    private void deleteOldClipboardItems(long days) {
-        // Implement the logic to delete clipboard items older than the specified number of days
-        // This may involve running a SQL query to delete old records from the database
-        // Example:
-        ClipboardDB db = new ClipboardDB();
-        db.deleteOldClipboardItems(days);
-    }
+
     private void showClipboardView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("clipboard-view.fxml"));
         Pane clipboardPane = loader.load();
@@ -131,4 +168,51 @@ public class SettingsController {
         transition.setOnFinished(evt -> rootPane.getChildren().remove(backButton.getParent()));
         transition.play();
     }
+
+    private void exportToTextFile() {
+        //exporting = true;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Text File");
+        fileChooser.setInitialFileName("clipboard_history.txt");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+
+        // Get the primary screen bounds
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+        // Center the FileChooser dialog
+        Stage tempStage = new Stage();
+        tempStage.initStyle(StageStyle.UTILITY);
+        tempStage.setOpacity(0); // Make the stage invisible
+        tempStage.setAlwaysOnTop(true); // Keep it on top
+        tempStage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() / 2 - 200); // Approximate width of FileChooser
+        tempStage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() / 2 - 200); // Approximate height of FileChooser
+        tempStage.show();
+
+        File file = fileChooser.showSaveDialog(tempStage);
+
+        if (file != null) {
+            try (FileWriter writer = new FileWriter(file)) {
+                ClipboardDB db = new ClipboardDB();
+                List<String> clipboardHistory = db.getClipboardHistory();
+
+                int counter = 1;
+                for (String content : clipboardHistory) {
+                    writer.append(counter + "." + content.replace("\n", " ").replace("\r", " ")).append("\n");
+                    counter++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Close the temporary stage
+        tempStage.close();
+    }
+
+
+    public static boolean isExporting() {
+        return exporting;
+    }
+
 }
+

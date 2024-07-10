@@ -70,7 +70,7 @@ public class ClipboardDB {
     }
 
     public static void deleteOldClipboardItems(long days) {
-        String sql = "DELETE FROM clipboard WHERE timestamp < ?";
+        String sql = "DELETE FROM clipboard_history WHERE timestamp < ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

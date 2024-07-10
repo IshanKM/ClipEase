@@ -56,6 +56,15 @@ public class ClipboardViewController {
         clipboardTimeline.setCycleCount(Timeline.INDEFINITE); // run again and again
         clipboardTimeline.play(); // start
 
+        // to Delete old clipboard items
+        Timeline checkdurationDB = new Timeline(new KeyFrame(Duration.hours(24), event -> {
+            // Delete old clipboard items
+            SettingsController settingsController = new SettingsController();
+            settingsController.deleteOldClipboardItems();
+        }));
+        checkdurationDB.setCycleCount(Timeline.INDEFINITE); // run again and again
+        checkdurationDB.play();
+
         clipboardListView.setOnMouseClicked(event -> { // When list item is clicked
             String selectedItem = clipboardListView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
@@ -112,6 +121,7 @@ public class ClipboardViewController {
     }
 
     private String getClipboardContent() {  // Get clipboard content
+
         Clipboard clipboard = Clipboard.getSystemClipboard();
         if (clipboard.hasString()) {
             return clipboard.getString();
