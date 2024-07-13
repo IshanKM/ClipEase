@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -40,6 +41,11 @@ public class SettingsController {
     private Button exportButton;
 
     @FXML
+    private Label dbitemCountLabel;
+    @FXML
+    private Label dbsizeLabel;
+
+    @FXML
     private AnchorPane rootPane;
 
     @FXML
@@ -67,8 +73,8 @@ public class SettingsController {
         pasteDurationChoiceBox.getItems().addAll("1.7", "2.1", "5.1", "10.5","20.4","50.3");
 
         // Load saved preference or set default
-        //String savedPasteDuration = preferences.get(PASTE_DURATION_PREF_KEY, DEFAULT_PASTE_DURATION);
-        //pasteDurationChoiceBox.setValue(savedPasteDuration);
+        String savedPasteDuration = preferences.get(PASTE_DURATION_PREF_KEY, DEFAULT_PASTE_DURATION);
+        pasteDurationChoiceBox.setValue(savedPasteDuration);
 
         // Save preference on change
         pasteDurationChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -103,6 +109,8 @@ public class SettingsController {
             rotateTransition.setToAngle(0); // Rotate back to 0 degrees
             rotateTransition.play();
         });
+
+        updateDatabaseInfo();
     }
 
     public void setRootPane(AnchorPane rootPane) {
@@ -203,5 +211,18 @@ public class SettingsController {
 
     public static boolean isExporting() {
         return exporting;
+    }
+
+    private void updateDatabaseInfo() {
+        ClipboardDB db = new ClipboardDB();
+
+        // Fetch and display number of items in database
+        int itemCount = db.getClipboardItemCount();
+        dbitemCountLabel.setText("Items in Database: " + itemCount);
+
+        // Fetch and display database size
+        long sizeInBytes = db.getDatabaseSize();
+        long sizeInKB = sizeInBytes / 1024;
+        dbsizeLabel.setText("Database Size: " + sizeInKB + " KB");
     }
 }

@@ -1,3 +1,3 @@
 #!/bin/bash
-sleep 10.5
+sleep 1.7
 xdotool key ctrl+v

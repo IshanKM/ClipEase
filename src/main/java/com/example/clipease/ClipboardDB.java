@@ -1,5 +1,6 @@
 package com.example.clipease;
 
+import java.io.File;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -83,5 +84,23 @@ public class ClipboardDB {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getClipboardItemCount() {
+        String sql = "SELECT COUNT(*) AS count FROM clipboard_history";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            return rs.getInt("count");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public long getDatabaseSize() {
+        File file = new File("clipboard.db");
+        return file.length();
     }
 }
