@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -30,6 +31,9 @@ public class ClipboardViewController {
     private AnchorPane rootPane; // Add this to your FXML file's root AnchorPane
 
     @FXML
+    private Pane borderPane;
+
+    @FXML
     public void initialize() {
         clipboardDB = new ClipboardDB(); //initialize db
         List<String> history = clipboardDB.getClipboardHistory(); //get all previous history from db (previous clipboard contents)
@@ -39,6 +43,7 @@ public class ClipboardViewController {
 
         // Add custom css file
         clipboardListView.getStylesheets().add(getClass().getResource("/com/example/clipease/styles.css").toExternalForm());
+
         // Start clipboard monitoring using TimdeleteClipboardContenteline
         Timeline clipboardTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             String currentContent = getClipboardContent();
@@ -52,6 +57,7 @@ public class ClipboardViewController {
                 clipboardDB.saveClipboardContent(currentContent);
                 clipboardListView.getItems().add(0, currentContent); // Add first item
             }
+
         }));
         clipboardTimeline.setCycleCount(Timeline.INDEFINITE); // run again and again
         clipboardTimeline.play(); // start
@@ -93,6 +99,20 @@ public class ClipboardViewController {
             rotateTransition.setToAngle(0); // Rotate back to 0 degrees
             rotateTransition.play();
         });
+
+        //createRunningBorderEffect();
+    }
+
+    private void createRunningBorderEffect() {
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0), event -> borderPane.setStyle("-fx-border-color: blue transparent transparent transparent; -fx-border-width: 2;")),
+                new KeyFrame(Duration.seconds(0.25), event -> borderPane.setStyle("-fx-border-color: transparent blue transparent transparent; -fx-border-width: 2;")),
+                new KeyFrame(Duration.seconds(0.5), event -> borderPane.setStyle("-fx-border-color: transparent transparent blue transparent; -fx-border-width: 2;")),
+                new KeyFrame(Duration.seconds(0.75), event -> borderPane.setStyle("-fx-border-color: transparent transparent transparent blue; -fx-border-width: 2;")),
+                new KeyFrame(Duration.seconds(1), event -> borderPane.setStyle("-fx-border-color: blue; -fx-border-width: 2;"))
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
 
@@ -129,40 +149,30 @@ public class ClipboardViewController {
         return "";
     }
 
-    private void pasteClipboardContent(String content) { // Paste clipboard content
+    private void pasteClipboardContent(String content) {
+        // Set clipboard content
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.putString(content);
         clipboard.setContent(clipboardContent);
 
-        // Run the paste.sh script
-        try (InputStream is = getClass().getResourceAsStream("/com/example/clipease/paste.sh");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-             BufferedWriter writer = new BufferedWriter(new FileWriter("paste.sh"))) {
-
-            if (is == null) {
-                throw new FileNotFoundException("Resource not found: /com/example/clipease/paste.sh");
-            }
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writer.write(line);
-                writer.newLine();
-            }
-
+        // Run the script
+        try {
             // Make the script executable
-            new ProcessBuilder("chmod", "+x", "paste.sh").start().waitFor();
+            new ProcessBuilder("chmod", "+x", "src/main/resources/com/example/clipease/paste.sh").start().waitFor();
 
             // Run the script in a background thread
             new Thread(() -> {
                 try {
-                    new ProcessBuilder("./paste.sh").start();
+                    new ProcessBuilder("./src/main/resources/com/example/clipease/paste.sh").start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }).start();
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
+
 }

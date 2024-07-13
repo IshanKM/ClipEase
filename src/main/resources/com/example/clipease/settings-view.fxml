@@ -33,9 +33,10 @@
                 <Image url="@resources/backbutton.png" />
             </image>
         </ImageView>
-      <Label layoutX="26.0" layoutY="134.0" prefHeight="36.0" prefWidth="156.0" text="Paste from Clipboard Duration" wrapText="true" AnchorPane.leftAnchor="15.0" />
-      <ChoiceBox fx:id="pasteDurationChoiceBox" layoutX="177.0" layoutY="141.0" prefHeight="23.0" prefWidth="114.0" />
-      <Button fx:id="exportButton" layoutX="180.0" layoutY="240.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="108.0" text="Export" />
-      <Button fx:id="showAllButton" layoutX="15.0" layoutY="240.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="141.0" text="Show All Clipboard" />
+        <Label layoutX="26.0" layoutY="134.0" prefHeight="36.0" prefWidth="156.0" text="Paste from Clipboard Duration" wrapText="true" AnchorPane.leftAnchor="15.0" />
+        <ChoiceBox fx:id="pasteDurationChoiceBox" layoutX="177.0" layoutY="141.0" prefHeight="23.0" prefWidth="114.0" />
+        <Button fx:id="exportButton" layoutX="180.0" layoutY="240.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="108.0" text="Export" />
+        <Button fx:id="showAllButton" layoutX="15.0" layoutY="240.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="141.0" text="Show All Clipboard" />
+        <Label alignment="CENTER" layoutX="2.0" layoutY="379.0" prefHeight="11.0" prefWidth="310.0" style="-fx-font-size: 10px; -fx-text-fill: grey;" text="All rights reserved by CeylonWave Technologies" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="2.0" />
     </children>
 </AnchorPane>

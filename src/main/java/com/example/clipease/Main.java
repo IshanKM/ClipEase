@@ -29,12 +29,11 @@ public class Main extends Application {
 
 
         // Add a focus listener to close the app when it loses focus
-        stage.focusedProperty().addListener((observable, oldValue, newValue) -> {
+       /* stage.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && !SettingsController.isExporting()) {
                 stage.close();
             }
-        });
-
+        }); */
         stage.show();
     }
     public static void main(String[] args) {

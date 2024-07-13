@@ -25,12 +25,13 @@ import java.util.List;
 import java.util.prefs.Preferences;
 import java.nio.file.Paths;
 
-
 public class SettingsController {
 
     private final Preferences preferences = Preferences.userNodeForPackage(SettingsController.class);
     private static final String DURATION_PREF_KEY = "clipboard_duration";
-    private static final String DEFAULT_DURATION = "15d";
+    private static final String PASTE_DURATION_PREF_KEY = "paste_duration";
+    private static final String DEFAULT_DURATION = "30d";
+    private static final String DEFAULT_PASTE_DURATION = "2.5";
 
     @FXML
     private ImageView backButton;
@@ -51,31 +52,35 @@ public class SettingsController {
 
     @FXML
     public void initialize() {
-        // Load saved preference
+        // Load saved preferences
         String savedDuration = preferences.get(DURATION_PREF_KEY, DEFAULT_DURATION);
         durationChoiceBox.setValue(savedDuration);
 
         // Save preference on change
         durationChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            preferences.put(DURATION_PREF_KEY, newValue);
+            if (newValue != null) {
+                preferences.put(DURATION_PREF_KEY, newValue);
+            }
+        });
+
+        // Populate choice box with options
+        pasteDurationChoiceBox.getItems().addAll("1.7", "2.1", "5.1", "10.5","20.4","50.3");
+
+        // Load saved preference or set default
+        //String savedPasteDuration = preferences.get(PASTE_DURATION_PREF_KEY, DEFAULT_PASTE_DURATION);
+        //pasteDurationChoiceBox.setValue(savedPasteDuration);
+
+        // Save preference on change
+        pasteDurationChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                preferences.put(PASTE_DURATION_PREF_KEY, newValue);
+                updatePasteScript(newValue);
+                //System.out.println(newValue);
+            }
         });
 
         // Add click handler to export button
         exportButton.setOnAction(event -> exportToTextFile());
-
-
-        // Populate choice box with options
-        pasteDurationChoiceBox.getItems().addAll("1.5s", "2s", "2.5s", "10s");
-
-        // Load saved preference or set default
-        String savedPasteDuration = loadPasteDurationPreference();
-        pasteDurationChoiceBox.setValue(savedPasteDuration);
-
-        // Save preference on change
-        pasteDurationChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            savePasteDurationPreference(newValue);
-            updatePasteScript(newValue);
-        });
 
         // Add click handlers to back button
         backButton.setOnMouseClicked(event -> {
@@ -104,29 +109,16 @@ public class SettingsController {
         this.rootPane = rootPane;
     }
 
-    private String loadPasteDurationPreference() {
-        // Load from preferences or use a default value
-        return "2s";  // Example default
-    }
-
-    private void savePasteDurationPreference(String duration) {
-        // Save to preferences
-        // Example using Files.write for simplicity (adjust as per your preferences implementation)
-        Path prefFile = Paths.get("paste_duration.txt");
-        try {
-            Files.write(prefFile, duration.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void updatePasteScript(String duration) {
+
+        //String duration = preferences.get(PASTE_DURATION_PREF_KEY, DEFAULT_PASTE_DURATION);
+
         // Update paste.sh file with the selected duration
         String scriptContent = "#!/bin/bash\n" +
                 "sleep " + duration + "\n" +
                 "xdotool key ctrl+v\n";
 
-        Path scriptFile = Paths.get("paste.sh");
+        Path scriptFile = Paths.get("src/main/resources/com/example/clipease/paste.sh");
         try (FileWriter writer = new FileWriter(scriptFile.toFile())) {
             writer.write(scriptContent);
         } catch (IOException e) {
@@ -209,10 +201,7 @@ public class SettingsController {
         tempStage.close();
     }
 
-
     public static boolean isExporting() {
         return exporting;
     }
-
 }
-

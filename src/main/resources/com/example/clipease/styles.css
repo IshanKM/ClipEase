@@ -25,11 +25,34 @@
 }
 
 .button:focused{
-    -fx-border-color: red;
+    -fx-border-color: transparent;
 }
 
 .curved-pane {
     -fx-background-color: white;
     -fx-background-radius: 10px 10px 0 0; /* Curving only the top left and top right corners */
     -fx-border-radius: 10px 10px 0 0;
+}
+
+.list-cell {
+
+}
+
+.list-cell:hover {
+
+}
+
+.list-cell {
+    -fx-padding: 10;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+}
+
+.list-cell-content {
+    -fx-background-color: white; /* You can set the background color here */
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-padding: 10;
 }
