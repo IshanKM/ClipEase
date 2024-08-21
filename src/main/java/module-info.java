@@ -3,6 +3,8 @@ module com.example.clipease {
     requires javafx.fxml;
     requires java.sql;
     requires java.prefs;
+    requires com.github.kwhat.jnativehook;
+    requires java.management;
 
 
     opens com.example.clipease to javafx.fxml;

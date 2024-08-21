@@ -28,6 +28,9 @@ public class ClipboardViewController {
     private ImageView settingsIcon;
 
     @FXML
+    private ImageView redCloseIcon;
+
+    @FXML
     private AnchorPane rootPane; // Add this to your FXML file's root AnchorPane
 
     @FXML
@@ -85,6 +88,11 @@ public class ClipboardViewController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        });
+
+        redCloseIcon.setOnMouseClicked(event -> {
+            Main main = new Main();
+            main.addAppToTray();
         });
 
         // Add rotate effect handlers
@@ -149,7 +157,7 @@ public class ClipboardViewController {
         return "";
     }
 
-    private void pasteClipboardContent(String content) {
+    public void pasteClipboardContent(String content) {
         // Set clipboard content
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent clipboardContent = new ClipboardContent();

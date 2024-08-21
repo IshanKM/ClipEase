@@ -5,23 +5,34 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.Pane?>
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="310.0" style="-fx-background-color: white;" styleClass="curved-pane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.clipease.ClipboardViewController">
    <children>
-      <Pane fx:id="borderPane" layoutX="0" layoutY="0" prefWidth="310" prefHeight="400" style="-fx-border-color: blue; -fx-border-width: 2; -fx-background-color: transparent;" />
-      <ListView fx:id="clipboardListView" layoutX="15.0" layoutY="57.0" prefHeight="303.0" prefWidth="250.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Pane fx:id="borderPane" layoutX="0" layoutY="0" prefHeight="400" prefWidth="310" style="-fx-border-color: blue; -fx-border-width: 2; -fx-background-color: transparent;">
+         <children>
+            <Label alignment="TOP_CENTER" layoutX="82.0" layoutY="26.0" prefHeight="15.0" prefWidth="146.0" text="ClipEase">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="settingsIcon" fitHeight="21.0" fitWidth="35.0" layoutX="20.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand; -fx-scale-x: 1.0; -fx-scale-y: 1.0;" styleClass="settings-icon">
+               <image>
+                  <Image url="@resources/setting.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="redCloseIcon" fitHeight="21.0" fitWidth="21.0" layoutX="271.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@resources/red%20close%20button.png" />
+               </image>
+            </ImageView>
+         </children></Pane>
+      <ListView fx:id="clipboardListView" layoutX="15.0" layoutY="67.0" prefHeight="293.0" prefWidth="280.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
       <Label alignment="CENTER" layoutX="15.0" layoutY="361.0" prefHeight="36.0" prefWidth="280.0" text="Select an item in your clipboard history to paste it">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <ImageView fx:id="settingsIcon" fitHeight="21.0" fitWidth="35.0" layoutX="265.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand; -fx-scale-x: 1.0; -fx-scale-y: 1.0;" styleClass="settings-icon">
-         <image>
-            <Image url="@resources/setting.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="15.0" layoutY="24.0" prefHeight="15.0" prefWidth="79.0" text="ClipEase" />
    </children>
 </AnchorPane>

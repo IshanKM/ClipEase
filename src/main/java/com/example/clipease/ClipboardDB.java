@@ -26,7 +26,7 @@ public class ClipboardDB {
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -38,7 +38,7 @@ public class ClipboardDB {
             pstmt.setString(1, content);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ public class ClipboardDB {
                 history.add(rs.getString("content"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return history;
     }
@@ -66,7 +66,7 @@ public class ClipboardDB {
             pstmt.setString(1, content);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -94,13 +94,17 @@ public class ClipboardDB {
              ResultSet rs = stmt.executeQuery(sql)) {
             return rs.getInt("count");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return 0;
         }
     }
 
     public long getDatabaseSize() {
-        File file = new File("clipboard.db");
-        return file.length();
+        try {
+            File file = new File("clipboard.db");
+            return file.length();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
