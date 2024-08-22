@@ -31,6 +31,10 @@ public class Main extends Application {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setAlwaysOnTop(true);
 
+        ClipboardViewController controller = fxmlLoader.getController();
+        controller.setStage(primaryStage);
+
+
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds(); // Get the screen bounds
 
         // Set the position of the stage to the bottom right corner
@@ -57,11 +61,6 @@ public class Main extends Application {
 
     public void addAppToTray() {
 
-        try {
-            sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         // Ensure AWT Toolkit is initialized
         java.awt.Toolkit.getDefaultToolkit();
 

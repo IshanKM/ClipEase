@@ -24,7 +24,7 @@
             </ImageView>
             <ImageView fx:id="redCloseIcon" fitHeight="21.0" fitWidth="21.0" layoutX="271.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@resources/red%20close%20button.png" />
+                  <Image url="@resources/red close button.png" />
                </image>
             </ImageView>
          </children></Pane>

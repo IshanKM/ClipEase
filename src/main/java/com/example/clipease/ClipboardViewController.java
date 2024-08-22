@@ -10,6 +10,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -25,16 +26,22 @@ public class ClipboardViewController {
     private ClipboardDB clipboardDB;
 
     @FXML
-    private ImageView settingsIcon;
+    public ImageView settingsIcon;
 
     @FXML
-    private ImageView redCloseIcon;
+    public ImageView redCloseIcon;
 
     @FXML
     private AnchorPane rootPane; // Add this to your FXML file's root AnchorPane
 
     @FXML
     private Pane borderPane;
+
+    private Stage stage;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     @FXML
     public void initialize() {
@@ -91,6 +98,7 @@ public class ClipboardViewController {
         });
 
         redCloseIcon.setOnMouseClicked(event -> {
+            stage.hide();
             Main main = new Main();
             main.addAppToTray();
         });
